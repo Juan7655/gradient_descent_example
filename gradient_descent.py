@@ -11,9 +11,6 @@ def run():
 		print("m:" + str(m_current) + "	|	b:" + str(b_current))
 	print("Error: " + str(final_error))
 
-
-
-
 def step_gradient(b_current, m_current, points, learning_rate):
 	m_gradient = 0
 	b_gradient = 0
