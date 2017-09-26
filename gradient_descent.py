@@ -1,12 +1,12 @@
 def run():
-	with open("results-20170918-230306.csv") as file:
+	with open("results-lin.csv") as file:
 		data = file.readlines()
 
 	m_current = 0
 	b_current = 0
 	final_error = 0
 
-	for i in range(600):
+	for i in range(6000):
 		[b_current, m_current, final_error] = step_gradient(b_current, m_current, data, 0.0001)
 		print("m:" + str(m_current) + "	|	b:" + str(b_current))
 	print("Error: " + str(final_error))
@@ -22,8 +22,8 @@ def step_gradient(b_current, m_current, points, learning_rate):
 	for line in points:
 		if condition:
 				text = line.split(",")
-				x = int(text[1])
-				y = int(text[2])
+				x = float(text[0])
+				y = float(text[1])
 				function = (y - m_current * x - b_current)/N
 				error += (function**2) * N
 				m_gradient -= 2 * x * function
