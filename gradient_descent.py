@@ -10,6 +10,7 @@ def run():
 	data = pd.read_csv("mpg.csv")
 
 	start_time = time.time()
+	# starting point will not be random, but the line from the first point, to the mean point of the set
 	m_current = (data[y_column].mean()-data[y_column][0])/(data[x_column].mean()-data[x_column][0])
 	b_current = data[y_column][0]-m_current*data[x_column][0]
 	final_error = 0
@@ -25,11 +26,15 @@ def step_gradient(b_current, m_current, points, learning_rate):
 	num_points = float(len(points) - 1)
 	temp_points = points.copy()
 
+	# base function of difference expected-obtained i.e. y-y' or y-(mx+b)
 	delta = (temp_points[y_column]-m_current*temp_points[x_column]-b_current)
+	# error calculated from MSE
 	error = (delta**2).sum() / num_points
-	m_gradient = -(2/num_points) * (temp_points[x_column] * delta).sum()
+	# partial derivatives of error with respect to m and b respectively
+	m_gradient = -(2 / num_points) * temp_points[x_column].dot(delta)
 	b_gradient = -(2/num_points) * delta.sum()
 
+	# updating m and b values from gradients
 	new_m = m_current - (learning_rate * m_gradient)
 	new_b = b_current - (learning_rate * b_gradient)
 
