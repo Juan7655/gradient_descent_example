@@ -1,13 +1,13 @@
 import time
-import pandas as pd
+import pandas
 
-x_column = "weight (n)"
-y_column = "mpg (n)"
-iterations = 60000
+x_column = "first_open"
+y_column = "app_remove"
+iterations = 600000
 
 
 def run():
-	data = pd.read_csv("mpg.csv")
+	data = pandas.read_csv("results-20170918-230306.csv")
 
 	start_time = time.time()
 	# starting point will not be random, but the line from the first point, to the mean point of the set
