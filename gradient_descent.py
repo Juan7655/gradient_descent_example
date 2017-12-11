@@ -30,13 +30,13 @@ def run():
 
 	# plotting final trend line
 	y_val = m_current * x_val + b_current
-	plt.plot(x_val, y_val, zorder=2, c='g', linewidth=2)
+	plt.plot(x_val, y_val, zorder=3, c='g', linewidth=2)
 
 	# plotting trend line in each iteration
 	# step size optimized to reduce excessive time
 	for i in range(0, len(res), max(int(iterations/6000), 1)):
 		y_val = res["m"][i] * x_val + res["b"][i]
-		plt.plot(x_val, y_val, zorder=4, c='b', linewidth=.1)
+		plt.plot(x_val, y_val, zorder=2, c='b', linewidth=.1)
 
 	# base scatter graph (original data points)
 	plt.scatter(data[x_column], data[y_column], zorder=1, s=3)
@@ -48,7 +48,7 @@ def run():
 	x_val = [i for i in range(iterations)]
 	plt.xlabel("Learning Iteration")
 	plt.ylabel("Error Value MSE")
-	plt.plot(x_val, res["error"], zorder=4, c='r', linewidth=1)
+	plt.plot(x_val, res["error"], c='r', linewidth=1)
 	plt.show()
 
 	print("m:" + str(m_current) + "	b:" + str(b_current) + "  E:" + str(final_error))
