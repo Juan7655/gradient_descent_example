@@ -1,24 +1,48 @@
 import time
 import pandas
+import matplotlib.pyplot as plt
+import numpy as np
 
-x_column = "first_open"
-y_column = "app_remove"
-iterations = 600000
+x_column = "weight (n)"
+y_column = "mpg (n)"
+iterations = 60000
+result = []
 
 
 def run():
-	data = pandas.read_csv("results-20170918-230306.csv")
+	data = pandas.read_csv("mpg.csv")
 
 	start_time = time.time()
 	# starting point will not be random, but the line from the first point, to the mean point of the set
-	m_current = (data[y_column].mean()-data[y_column][0])/(data[x_column].mean()-data[x_column][0])
-	b_current = data[y_column][0]-m_current*data[x_column][0]
+	m_current = (data[y_column].mean() - data[y_column][0]) / (data[x_column].mean() - data[x_column][0])
+	b_current = data[y_column][0] - m_current * data[x_column][0]
 	final_error = 0
 
 	for i in range(iterations):
 		[b_current, m_current, final_error] = step_gradient(b_current, m_current, data, 0.00000010405)
-		print("m:" + str(m_current) + "	b:" + str(b_current) + "  E:" + str(final_error))
-	print("Error: " + str(final_error))
+		result.append([m_current, b_current, final_error])
+	res = pandas.DataFrame(data=result, columns=["m", "b", "error"])
+
+	# x values for the trend lines in the graph
+	x_val = np.array([i*(5300/1000) for i in range(1000)])
+
+	# plotting final trend line
+	y_val = m_current * x_val + b_current
+	plt.plot(x_val, y_val, zorder=2, c='r', linewidth=2)
+
+	# plotting trend line in each iteration
+	# step size optimized to reduce excessive time
+	for i in range(0, len(res), max(int(iterations/6000), 1)):
+		y_val = res["m"][i] * x_val + res["b"][i]
+		plt.plot(x_val, y_val, zorder=4, c='b', linewidth=.1)
+
+	# base scatter graph (original data points)
+	plt.scatter(data[x_column], data[y_column], zorder=1, s=3)
+	plt.xlabel(x_column)
+	plt.ylabel(y_column)
+	plt.show()
+
+	print("m:" + str(m_current) + "	b:" + str(b_current) + "  E:" + str(final_error))
 	print("Execution time: %s seconds" % (time.time() - start_time))
 
 
